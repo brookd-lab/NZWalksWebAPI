@@ -10,6 +10,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using NZWalks.API.Middlewares;
+using EmployeeApi.Data;
+using EmployeeApi.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,10 +71,14 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnectio
 builder.Services.AddDbContext<NZWalksAuthDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksAuthConnectionString")));
 
+builder.Services.AddDbContext<ApiDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeConnection")));
+
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 builder.Services.AddScoped<IWalkRepository, SQLWalkRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IImageRepository, LocalImageRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
