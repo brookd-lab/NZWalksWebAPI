@@ -17,6 +17,7 @@ namespace EmployeeApi.Controllers
             _repo = repo;
         }
 
+        [Authorize(Roles = "Reader")]
         [HttpGet]
         public async Task<IActionResult> GetEmployeesAsync()
         {
@@ -49,6 +50,7 @@ namespace EmployeeApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> RemoveEmployeeAsync(int id)
         {
             var employee = await _repo.RemoveEmployeeAsync(id);
@@ -62,6 +64,7 @@ namespace EmployeeApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateEmployeeAsync(Employee employee)
         {
             var updateEmployee = await _repo.UpdateEmployeeAsync(employee);

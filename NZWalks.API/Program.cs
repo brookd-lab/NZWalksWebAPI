@@ -116,6 +116,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder
+                    .WithOrigins("http://localhost:8081","http://localhost:8080","http://localhost:8082","http://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -128,6 +140,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication();
 
